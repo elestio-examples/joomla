@@ -1,0 +1,61 @@
+version: "3.3"
+
+services:
+  joomla:
+    image: docker.io/bitnami/joomla:5
+    restart: always
+    links:
+      - mariadb:mariadb
+    ports:
+      - 172.17.0.1:8080:8080
+    environment:
+      - JOOMLA_DATABASE_HOST=mariadb
+      - JOOMLA_DATABASE_PORT_NUMBER=3306
+      - JOOMLA_DATABASE_USER=${MYSQL_USER}
+      - JOOMLA_DATABASE_PASSWORD=${MYSQL_PASSWORD}
+      - JOOMLA_DATABASE_NAME=joomla
+      - ALLOW_EMPTY_PASSWORD=no
+      - JOOMLA_USERNAME=${JOOMLA_USERNAME}
+      - JOOMLA_PASSWORD=${JOOMLA_PASSWORD}
+      - JOOMLA_EMAIL=$JOOMLA_EMAIL
+      - JOOMLA_SITE_NAME=$JOOMLA_SITE_NAME
+      - JOOMLA_SMTP_HOST=172.17.0.1
+      - JOOMLA_SMTP_PORT=25
+      - JOOMLA_SMTP_SENDER_EMAIL=joomla-nlzzo-u353.vm.elestio.app@vm.elestio.app
+    volumes:
+      - ./joomla-data:/var/www/html
+    depends_on:
+      - mariadb
+
+  mariadb:
+    image: elestio/mariadb:11.2
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      # - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_USER=${MYSQL_USER}
+      - MARIADB_DATABASE=joomla
+      - MARIADB_ROOT_PASSWORD=${MYSQL_PASSWORD}
+      - MARIADB_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - "./mariadb_data:/var/lib/mysql"
+    ports:
+      - 172.17.0.1:3306:3306
+
+  phpmyadmin:
+    depends_on:
+      - mariadb
+    image: elestio/phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - 172.17.0.1:24581:80
+    env_file:
+      - .env
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: ${ADMIN_PASSWORD}
+      UPLOAD_LIMIT: 500M
+      MYSQL_USERNAME: root
+      MYSQL_ROOT_PASSWORD: ${ADMIN_PASSWORD}
