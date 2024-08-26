@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   joomla:
-    image: joomla
+    image: joomla:${SOFTWARE_VERSION_TAG}
     restart: always
     ports:
       - "172.17.0.1:8080:80"
@@ -11,7 +11,7 @@ services:
       JOOMLA_DB_PASSWORD: ${DATABASE_PASSWORD}
       JOOMLA_DB_NAME: ${JOOMLA_DB_NAME}
       JOOMLA_SITE_NAME: Joomla
-      JOOMLA_ADMIN_USER: Joomla Hero
+      JOOMLA_ADMIN_USER: Root
       JOOMLA_ADMIN_USERNAME: ${ADMIN_EMAIL}
       JOOMLA_ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       JOOMLA_ADMIN_EMAIL: ${ADMIN_EMAIL}
@@ -37,7 +37,6 @@ services:
     networks:
       - joomla_network
 
-  # Uncomment and configure phpmyadmin if needed
   pma:
     image: elestio/phpmyadmin:latest
     restart: always
