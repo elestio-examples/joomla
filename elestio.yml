@@ -55,7 +55,3 @@ webUI:
     label: "Joomla Admin"
     login: "[ADMIN_EMAIL]"
     password: "[ADMIN_PASSWORD]"
-  - url: "https://[CI_CD_DOMAIN]:55579"
-    label: "PHPMyAdmin"
-    login: "root"
-    password: "[ADMIN_PASSWORD]"
