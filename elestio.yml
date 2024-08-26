@@ -7,7 +7,6 @@ ports:
     public: true
     path: "/"
     isAuth: false
-
   - protocol: "HTTPS"
     targetProtocol: "HTTP"
     listeningPort: "40573"
