@@ -4,7 +4,7 @@ services:
     image: joomla
     restart: always
     ports:
-      - "8080:80"
+      - "172.17.0.1:8080:80"
     environment:
       JOOMLA_DB_HOST: db
       JOOMLA_DB_USER: ${JOOMLA_USER}
